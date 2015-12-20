@@ -66,42 +66,42 @@
       (shell-command "re.sh"))
 
 
-;; -----------------------------------------------------------------------------
-;; increment/decrement region
-;; -----------------------------------------------------------------------------
-(defun increment-region (&optional beg end arg)
-"Increment all decimal numbers in region between `beg' and
+    ;; -----------------------------------------------------------------------------
+    ;; increment/decrement region
+    ;; -----------------------------------------------------------------------------
+    (defun increment-region (&optional beg end arg)
+      "Increment all decimal numbers in region between `beg' and
 `end' by `arg'. If no prefix arg is given, increment by 1. If the
 mark is not active, try to build a region using
 `symbol-at-point'."
-(interactive "r\np")
-(or arg (setq arg 1))
-(unless (and mark-active transient-mark-mode)
-(let ((bounds (bounds-of-thing-at-point 'symbol)))
-(if bounds (setq beg (car bounds) end (cdr bounds)))))
-(if (< end beg)
-(let ((tmp end))
-(setq beg end end tmp)))
-(save-excursion
-(goto-char beg)
-(while (re-search-forward "-?[0-9]+" end t)
-(replace-match (number-to-string (+ arg (string-to-number (match-string 0)))))))
-(setq deactivate-mark nil))
+      (interactive "r\np")
+      (or arg (setq arg 1))
+      (unless (and mark-active transient-mark-mode)
+        (let ((bounds (bounds-of-thing-at-point 'symbol)))
+          (if bounds (setq beg (car bounds) end (cdr bounds)))))
+      (if (< end beg)
+          (let ((tmp end))
+            (setq beg end end tmp)))
+      (save-excursion
+        (goto-char beg)
+        (while (re-search-forward "-?[0-9]+" end t)
+          (replace-match (number-to-string (+ arg (string-to-number (match-string 0)))))))
+      (setq deactivate-mark nil))
 
-(defun decrement-region (&optional beg end arg)
-"Decrement all decimal numbers in region between `beg' and
+    (defun decrement-region (&optional beg end arg)
+      "Decrement all decimal numbers in region between `beg' and
 `end' by `arg'. If no prefix arg is given, increment by 1. If the
 mark is not active, try to build a region using
 `symbol-at-point'."
-(interactive "r\np")
-(or arg (setq arg 1))
-(unless (and mark-active transient-mark-mode)
-(let ((bounds (bounds-of-thing-at-point 'symbol)))
-(if bounds (setq beg (car bounds) end (cdr bounds)))))
-(increment-region beg end (- arg)))
+      (interactive "r\np")
+      (or arg (setq arg 1))
+      (unless (and mark-active transient-mark-mode)
+        (let ((bounds (bounds-of-thing-at-point 'symbol)))
+          (if bounds (setq beg (car bounds) end (cdr bounds)))))
+      (increment-region beg end (- arg)))
 
 
-(defun increment-number-at-point ()
+    (defun increment-number-at-point ()
       (interactive)
       (skip-chars-backward "0123456789")
       (or (looking-at "[0123456789]+")
